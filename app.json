@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "HU-Task",
-    "slug": "HU-Task",
+    "slug": "hu-task-app-o7jzo7eixbt199vbvobeb",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -9,7 +9,11 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.eng.abdishakuur.hutaskappo7jzo7eixbt199vbvobeb",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +23,8 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.eng.abdishakuur.hutaskappo7jzo7eixbt199vbvobeb"
     },
     "web": {
       "output": "static",
@@ -43,6 +48,13 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "840170ad-6332-4992-8028-de27add549ad"
+      }
+    },
+    "owner": "eng.abdishakuur"
   }
 }
