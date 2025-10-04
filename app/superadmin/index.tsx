@@ -2,15 +2,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import {
-    Dimensions,
-    Image,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 
 const { width } = Dimensions.get('window');
@@ -19,14 +18,6 @@ export default function SuperAdminDashboard() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('dashboard');
   const [sidebarVisible, setSidebarVisible] = useState(true);
-  const [showCreateUserForm, setShowCreateUserForm] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    role: '',
-    department: '',
-    phone: '',
-  });
 
   // Mock data - replace with actual data from your backend
   const userStats = {
@@ -51,42 +42,15 @@ export default function SuperAdminDashboard() {
   const handleNavigation = (route: string) => {
     setActiveTab(route);
     if (route === 'create-user') {
-      setShowCreateUserForm(true);
+      router.push('/superadmin/create-user');
     } else if (route === 'approval') {
       router.push('/superadmin/approval');
     } else if (route === 'active') {
       router.push('/superadmin/active');
-    } else if (route === 'dashboard') {
-      setShowCreateUserForm(false);
     }
-  };
-
-  const handleCreateUser = () => {
-    // Validation
-    if (!formData.name || !formData.email || !formData.role) {
-      alert('Please fill in all required fields');
-      return;
-    }
-
-    // Add user creation logic here
-    alert('User created successfully!');
-    setFormData({ name: '', email: '', role: '', department: '', phone: '' });
-    setShowCreateUserForm(false);
-    setActiveTab('dashboard');
-  };
-
-  const handleCancelCreateUser = () => {
-    setShowCreateUserForm(false);
-    setActiveTab('dashboard');
-    setFormData({ name: '', email: '', role: '', department: '', phone: '' });
-  };
-
-  const handleToggleSidebarOnCreatePage = () => {
-    setSidebarVisible(!sidebarVisible);
   };
 
   const handleLogout = () => {
-    // Add logout logic here
     router.push('/Login');
   };
 
@@ -108,12 +72,6 @@ export default function SuperAdminDashboard() {
           </View>
           <Text style={styles.profileName}>Super Admin</Text>
           <Text style={styles.profileRole}>System Administrator</Text>
-          <View style={styles.profileStats}>
-            <View style={styles.profileStatItem}>
-              <Text style={styles.profileStatValue}>24/7</Text>
-              <Text style={styles.profileStatLabel}>Active</Text>
-            </View>
-          </View>
         </View>
 
         {/* Navigation Tabs */}
@@ -212,8 +170,7 @@ export default function SuperAdminDashboard() {
 
       {/* Main Content */}
       <View style={[styles.mainContent, !sidebarVisible && styles.mainContentExpanded]}>
-        {!showCreateUserForm ? (
-          <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView showsVerticalScrollIndicator={false}>
             {/* Header */}
             <View style={styles.header}>
             <View style={styles.headerLeft}>
@@ -444,159 +401,6 @@ export default function SuperAdminDashboard() {
             </View>
           </View>
         </ScrollView>
-        ) : (
-          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContainer}>
-            {/* Clean Header */}
-            <View style={styles.cleanHeader}>
-              <TouchableOpacity 
-                style={styles.toggleButton} 
-                onPress={handleToggleSidebarOnCreatePage}
-              >
-                <Ionicons 
-                  name={sidebarVisible ? "menu-outline" : "menu"} 
-                  size={24} 
-                  color="#64748b" 
-                />
-              </TouchableOpacity>
-              <View style={styles.headerContent}>
-                <Text style={styles.cleanTitle}>Add New User</Text>
-                <Text style={styles.cleanSubtitle}>Create a new account in just a few steps</Text>
-              </View>
-            </View>
-
-            {/* Clean Form Content */}
-            <View style={styles.cleanFormWrapper}>
-              <View style={styles.cleanFormCard}>
-                
-                {/* Name Field */}
-                <View style={styles.cleanField}>
-                  <Text style={styles.cleanLabel}>Full Name</Text>
-                  <View style={styles.cleanInput}>
-                    <Ionicons name="person-outline" size={20} color="#94a3b8" />
-                    <TextInput
-                      style={styles.cleanTextInput}
-                      placeholder="Enter full name"
-                      value={formData.name}
-                      onChangeText={(text) => setFormData({ ...formData, name: text })}
-                      placeholderTextColor="#cbd5e1"
-                    />
-                  </View>
-                </View>
-
-                {/* Email Field */}
-                <View style={styles.cleanField}>
-                  <Text style={styles.cleanLabel}>Email Address</Text>
-                  <View style={styles.cleanInput}>
-                    <Ionicons name="mail-outline" size={20} color="#94a3b8" />
-                    <TextInput
-                      style={styles.cleanTextInput}
-                      placeholder="Enter email address"
-                      value={formData.email}
-                      onChangeText={(text) => setFormData({ ...formData, email: text })}
-                      keyboardType="email-address"
-                      autoCapitalize="none"
-                      placeholderTextColor="#cbd5e1"
-                    />
-                  </View>
-                </View>
-
-                {/* Role Selection */}
-                <View style={styles.cleanField}>
-                  <Text style={styles.cleanLabel}>Select Admin Role</Text>
-                  <View style={styles.roleGrid}>
-                    {[
-                      { role: 'Admin', icon: 'shield-checkmark', desc: 'Full system access' },
-                      { role: 'Dept-Admin', icon: 'business', desc: 'Department level access' }
-                    ].map((item) => (
-                      <TouchableOpacity
-                        key={item.role}
-                        style={[
-                          styles.roleOption,
-                          formData.role === item.role && styles.roleOptionSelected,
-                        ]}
-                        onPress={() => setFormData({ ...formData, role: item.role })}
-                      >
-                        <Ionicons 
-                          name={item.icon as any} 
-                          size={24} 
-                          color={formData.role === item.role ? '#1e40af' : '#94a3b8'} 
-                        />
-                        <View style={styles.roleOptionText}>
-                          <Text style={[
-                            styles.roleOptionTitle,
-                            formData.role === item.role && styles.roleOptionTitleSelected
-                          ]}>
-                            {item.role}
-                          </Text>
-                          <Text style={styles.roleOptionDesc}>{item.desc}</Text>
-                        </View>
-                        {formData.role === item.role && (
-                          <Ionicons name="checkmark-circle" size={22} color="#1e40af" />
-                        )}
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                {/* Divider */}
-                <View style={styles.cleanDivider}>
-                  <View style={styles.dividerLine} />
-                  <Text style={styles.dividerText}>Optional Information</Text>
-                  <View style={styles.dividerLine} />
-                </View>
-
-                {/* Department Field */}
-                <View style={styles.cleanField}>
-                  <Text style={styles.cleanLabel}>Department (Optional)</Text>
-                  <View style={styles.cleanInput}>
-                    <Ionicons name="business-outline" size={20} color="#94a3b8" />
-                    <TextInput
-                      style={styles.cleanTextInput}
-                      placeholder="e.g., Computer Science"
-                      value={formData.department}
-                      onChangeText={(text) => setFormData({ ...formData, department: text })}
-                      placeholderTextColor="#cbd5e1"
-                    />
-                  </View>
-                </View>
-
-                {/* Phone Field */}
-                <View style={styles.cleanField}>
-                  <Text style={styles.cleanLabel}>Phone Number (Optional)</Text>
-                  <View style={styles.cleanInput}>
-                    <Ionicons name="call-outline" size={20} color="#94a3b8" />
-                    <TextInput
-                      style={styles.cleanTextInput}
-                      placeholder="e.g., +252 61 234 5678"
-                      value={formData.phone}
-                      onChangeText={(text) => setFormData({ ...formData, phone: text })}
-                      keyboardType="phone-pad"
-                      placeholderTextColor="#cbd5e1"
-                    />
-                  </View>
-                </View>
-
-                {/* Action Buttons */}
-                <View style={styles.cleanActions}>
-                  <TouchableOpacity
-                    style={styles.cleanCancelButton}
-                    onPress={handleCancelCreateUser}
-                  >
-                    <Text style={styles.cleanCancelText}>Cancel</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.cleanCreateButton}
-                    onPress={handleCreateUser}
-                  >
-                    <Ionicons name="checkmark-circle" size={20} color="#fff" />
-                    <Text style={styles.cleanCreateText}>Create User</Text>
-                  </TouchableOpacity>
-                </View>
-
-              </View>
-            </View>
-          </ScrollView>
-        )}
       </View>
     </View>
   );
@@ -657,26 +461,6 @@ const styles = StyleSheet.create({
   profileRole: {
     fontSize: 13,
     color: '#8b92a8',
-    marginBottom: 16,
-  },
-  profileStats: {
-    flexDirection: 'row',
-    gap: 20,
-  },
-  profileStatItem: {
-    alignItems: 'center',
-  },
-  profileStatValue: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: '#1e40af',
-    marginBottom: 4,
-  },
-  profileStatLabel: {
-    fontSize: 11,
-    color: '#94a3b8',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   navSection: {
     flex: 1,
@@ -793,7 +577,6 @@ const styles = StyleSheet.create({
   mainContent: {
     flex: 1,
     padding: 32,
-    transition: 'all 0.3s ease',
   },
   mainContentExpanded: {
     marginLeft: 0,
@@ -918,7 +701,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   statCard: {
-    width: 'calc(50% - 8px)',
+    flex: 1,
     minWidth: 220,
     backgroundColor: '#ffffff',
     padding: 20,
@@ -932,6 +715,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     borderWidth: 1,
     borderColor: '#f0f0f5',
+    marginHorizontal: 4,
   },
   statIconContainer: {
     width: 56,
@@ -1141,169 +925,5 @@ const styles = StyleSheet.create({
     height: 1,
     backgroundColor: '#f0f0f5',
     marginVertical: 4,
-  },
-  // Clean Create User Form Styles
-  scrollContainer: {
-    paddingBottom: 40,
-  },
-  cleanHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 32,
-    gap: 16,
-  },
-  toggleButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: '#ffffff',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-  },
-  headerContent: {
-    flex: 1,
-  },
-  cleanTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: '#1e293b',
-    marginBottom: 4,
-  },
-  cleanSubtitle: {
-    fontSize: 14,
-    color: '#94a3b8',
-  },
-  cleanFormWrapper: {
-    alignItems: 'center',
-  },
-  cleanFormCard: {
-    width: '100%',
-    maxWidth: 600,
-    backgroundColor: '#ffffff',
-    borderRadius: 20,
-    padding: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05,
-    shadowRadius: 12,
-    elevation: 3,
-  },
-  cleanField: {
-    marginBottom: 24,
-  },
-  cleanLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1e293b',
-    marginBottom: 10,
-  },
-  cleanInput: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    gap: 12,
-  },
-  cleanTextInput: {
-    flex: 1,
-    fontSize: 15,
-    color: '#1e293b',
-  },
-  roleGrid: {
-    gap: 12,
-  },
-  roleOption: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f8fafc',
-    borderWidth: 2,
-    borderColor: '#e2e8f0',
-    borderRadius: 12,
-    padding: 16,
-    gap: 12,
-  },
-  roleOptionSelected: {
-    backgroundColor: '#1e40af08',
-    borderColor: '#1e40af',
-  },
-  roleOptionText: {
-    flex: 1,
-  },
-  roleOptionTitle: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#64748b',
-    marginBottom: 2,
-  },
-  roleOptionTitleSelected: {
-    color: '#1e293b',
-  },
-  roleOptionDesc: {
-    fontSize: 13,
-    color: '#94a3b8',
-  },
-  cleanDivider: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 28,
-  },
-  dividerLine: {
-    flex: 1,
-    height: 1,
-    backgroundColor: '#e2e8f0',
-  },
-  dividerText: {
-    fontSize: 12,
-    color: '#94a3b8',
-    fontWeight: '600',
-    paddingHorizontal: 16,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  cleanActions: {
-    flexDirection: 'row',
-    gap: 12,
-    marginTop: 32,
-  },
-  cleanCancelButton: {
-    flex: 1,
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: '#f8fafc',
-    borderWidth: 1,
-    borderColor: '#e2e8f0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  cleanCancelText: {
-    fontSize: 15,
-    color: '#64748b',
-    fontWeight: '600',
-  },
-  cleanCreateButton: {
-    flex: 2,
-    flexDirection: 'row',
-    paddingVertical: 14,
-    borderRadius: 12,
-    backgroundColor: '#1e40af',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 8,
-    shadowColor: '#1e40af',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  cleanCreateText: {
-    fontSize: 15,
-    color: '#ffffff',
-    fontWeight: '600',
   },
 });
